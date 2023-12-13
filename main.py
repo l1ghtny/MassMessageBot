@@ -79,7 +79,7 @@ class RolesSelect(discord.ui.RoleSelect):
         if not forbidden_users:
             await interaction.followup.send(content='All the dms have been sent', ephemeral=True)
         else:
-            await interaction.followup.send(content=f'Most of the users received dms, except from this list: [{forbidden_users}]. They have blocked the bot of disabled dms from your server')
+            await interaction.followup.send(content=f'Most of the users received dms, except from this list: [{forbidden_users}]. They have blocked the bot or disabled dms from your server')
 
 
 @tree.command(name='send_dm', description='sends dms to roles or users')
