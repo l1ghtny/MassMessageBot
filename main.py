@@ -61,22 +61,35 @@ class RolesSelect(discord.ui.RoleSelect):
         self.my_view = view
 
     async def callback(self, interaction: discord.Interaction):
+        await interaction.response.defer()
         dmed_users = []
+        forbidden_users = []
         for i in self.values:
             members = i.members
             for each in members:
-                if each != client.user and each not in dmed_users:
-                    await each.send(content=self.text)
-                    dmed_users.append(each)
+                if each != client.user and each not in dmed_users and not each.bot == True:
+                    try:
+                        await each.send(content=self.text)
+                        print(f'texted to user {each.global_name}')
+                        dmed_users.append(each)
+                    except discord.errors.Forbidden:
+                        forbidden_users.append(each)
+
         await SelectView.disable_one_item(self=self.my_view, select=self)
-        await interaction.response.send_message(content='All the dms have been sent', ephemeral=True)
+        if not forbidden_users:
+            await interaction.followup.send(content='All the dms have been sent', ephemeral=True)
+        else:
+            await interaction.followup.send(content=f'Most of the users received dms, except from this list: [{forbidden_users}]. They have blocked the bot of disabled dms from your server')
 
 
 @tree.command(name='send_dm', description='sends dms to roles or users')
 async def send_dm(interaction: discord.Interaction, message: str):
     roles_number = len(interaction.guild.roles)
+    if roles_number > 25:
+        roles_number = 25
     view = SelectView(message, roles_number, interaction)
     await interaction.response.send_message(view=view, ephemeral=True)
+
 
 
 client.run(DISCORD_TOKEN)
