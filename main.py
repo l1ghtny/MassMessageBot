@@ -4,8 +4,6 @@ from dotenv import load_dotenv
 import discord
 from discord import app_commands
 
-from typing import Optional, Any
-
 load_dotenv()
 # Get the API token from the .env file.
 DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
