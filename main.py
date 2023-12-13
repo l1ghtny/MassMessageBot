@@ -1,9 +1,8 @@
 import os
 
-from discord._types import ClientT
 from dotenv import load_dotenv
 import discord
-from discord import app_commands, Interaction
+from discord import app_commands
 
 from typing import Optional, Any
 
